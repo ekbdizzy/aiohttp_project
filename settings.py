@@ -5,6 +5,7 @@ env.read_env(".env")
 
 
 class Settings:
+    SECRET_KEY: str = env("SECRET_KEY")
 
     def get_postgres_uri(self, sync: bool = False) -> str:
         driver = "postgresql+psycopg2" if sync else "postgresql+asyncpg"

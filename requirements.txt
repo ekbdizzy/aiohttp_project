@@ -6,3 +6,5 @@ psycopg2-binary==2.9.9
 environs==10.3.0
 uvicorn==0.29.0
 asyncpg==0.29.0
+cryptography==44.0.1
+aiohttp_security==0.5.0

@@ -11,10 +11,10 @@ migrate:
 	alembic upgrade head
 
 migration.autogenerate:
-	sudo docker compose exec mp-auth alembic revision --autogenerate -m "${name}"
+	alembic revision --autogenerate -m "${name}"
 
 migration.manual:
-	sudo docker compose exec mp-auth alembic revision -m "${name}"
+	alembic revision -m "${name}"
 
 run:
 	python main.py

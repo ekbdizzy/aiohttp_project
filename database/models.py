@@ -34,7 +34,7 @@ class Permission(Base):
     is_blocked = Column(Boolean, default=False)
     is_admin = Column(Boolean, default=False)
     is_read_only = Column(Boolean, default=True)
-    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"))
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), unique=True)
 
     user = relationship("User", back_populates="permissions")
 
