@@ -1,0 +1,11 @@
+services:
+  database:
+    image: postgres:14
+    container_name: project-db
+    restart: always
+    ports:
+      - "${DB_EXTERNAL_PORT}:5432"
+    env_file:
+      - .env
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
