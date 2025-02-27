@@ -1,10 +1,18 @@
-from aiohttp import web
-from settings import Settings
+from importlib import reload
 
+from aiohttp import web
+import logging
+import asyncio
+
+from settings import Settings
 from database.database import create_tables
 from database.models import User, Permission
 
 settings = Settings()
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger("main")
+
+app = web.Application()
 
 
 async def handle(request):
@@ -13,25 +21,19 @@ async def handle(request):
     return web.Response(text=text)
 
 
-async def main():
+# Add routes
+app.router.add_get('/', handle)
+app.router.add_get('/{name}', handle)
+
+
+# Startup event
+async def on_startup(app):
     await create_tables()
-
-    app = web.Application()
-    app.router.add_get('/', handle)
-    app.router.add_get('/{name}', handle)
-
-    runner = web.AppRunner(app)
-    await runner.setup()
-    site = web.TCPSite(runner, 'localhost', 8080)
-    await site.start()
-
-    print("Server started at http://localhost:8080")
-    return runner
+    logger.info("Server started!")
 
 
+app.on_startup.append(on_startup)
+
+# For direct execution
 if __name__ == '__main__':
-    import asyncio
-
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
-    loop.run_forever()
+    web.run_app(app, host='localhost', port=8080)
